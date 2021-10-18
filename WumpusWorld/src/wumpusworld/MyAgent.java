@@ -120,34 +120,9 @@ public class MyAgent implements Agent
         //moveLeft();
         //moveRight();
         //moveDown();
-        //moveUp();
-	first_turn();
+        moveUp();
 
     }    
-    
-    public void first_turn()
-    {
-    	int first_turn = (Math.random() <= 0.5) ? 1 : 2; //Första draget kan antingen vara höger eller upp.
-    	if (first_turn == 1) //Finns inget som säger vilket drag som är det bästa första-draget. 
-    	{	
-    		moveUp();
-    		//Här har jag bara försökt göra så man ska gå tillbaka om det tex är stench, men inte lyckats än.
-//    		if (w.hasStench(1, 2)) {
-//    			w.doAction(World.A_TURN_LEFT);
-//    			w.doAction(World.A_TURN_LEFT);
-//    		}	
-    	}
-    	
-    	else if (first_turn == 2)
-    	{
-    		moveRight();
-    		//Här har jag bara försökt göra så man ska gå tillbaka om det tex är stench, men inte lyckats än.
-//    		if (w.hasStench(2, 1)) {
-//    			w.doAction(World.A_TURN_LEFT);
-//    			w.doAction(World.A_TURN_LEFT);
-//    		}
-    	}
-    }
     
      /**
      * Genertes a random instruction for the Agent.
