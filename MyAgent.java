@@ -7,7 +7,7 @@ import java.util.List;
  * Contains starting code for creating your own Wumpus World agent.
  * Currently the agent only make a random decision each turn.
  * 
- * @author Johan HagelbÃ¤ck
+ * @author Johan Hagelbäck
  */
 public class MyAgent implements Agent
 {
@@ -134,15 +134,16 @@ public class MyAgent implements Agent
         		{
     				w.doAction(World.A_SHOOT);//shot arrow to the current direction since it costs least points
     				System.out.println("Arrow was used");
+    				
     				if ((w.hasStench(w.getPlayerX(), w.getPlayerY())) == true)//checks if wumpus is still alive
     				{
     					System.out.println("Wumpus still alive");
-    					moveRight();//move right sinve this cost least points	
+    					w.doAction(World.A_MOVE);//no Wumpus so move forward
     				}
     				else
     				{
     					System.out.println("Wumpus was killed");
-    					moveRight(); //move to the right
+    					w.doAction(World.A_MOVE);
     				}
         		}
         		else
@@ -152,7 +153,16 @@ public class MyAgent implements Agent
         	}
         	else 
         	{
-        		moveRight();
+        		rnd = decideRandomMove();
+        		if (rnd > 1)
+        		{
+        			//(w.isVisited(cX + 1, cY) == false)
+        			//(w.isVisited(cX + 1, cY) == false)
+        			moveRight();
+        		}
+        		else {
+        			moveUp();
+        		}
         	}
         }
         else
@@ -182,39 +192,128 @@ public class MyAgent implements Agent
         		
         		else //moves in oposite direction if the first priority is visited/invalid
         		{
-        			if ((rnd == 0) & (w.isVisited(cX -1, cY) == false))
+        			if ((rnd == 0) & (w.isValidPosition(cX -1, cY) == true))
         			{
         				moveLeft();
         			}
-        			else if ((rnd == 1) & (w.isVisited(cX + 1, cY) == false))
+        			else if ((rnd == 1) & (w.isValidPosition(cX + 1, cY) == true))
         			{
         				moveRight();
         			}
-        			else if ((rnd == 2) & (w.isVisited(cX, cY-1) == false))
+        			else if ((rnd == 2) & (w.isValidPosition(cX, cY-1) == true))
         			{
         				moveDown();
         			}
-        			else if ((rnd == 3) & (w.isVisited(cX, cY+ 1) == false))
+        			else if ((rnd == 3) & (w.isValidPosition(cX, cY+ 1) == true))
         			{
         				moveUp();
         			}
         		}
         	}
-        	
-        }
-        
-        
-        
-        
-        	
-        	
-        
+        	else if ((w.hasStench(cX, cY) == true) || ((w.hasStench(cX, cY) == true) & (w.hasBreeze(cX, cY))))
+        		{
+        		rnd = decideRandomMove();
+        		if (rnd < 2) { //return to the place it visited
+        			if (w.isVisited(cX -1, cY) == true)
+        			{
+        				moveLeft();
+        			}
+        			else if (w.isVisited(cX + 1, cY) == true)
+        			{
+        				moveRight();
+        			}
+        			else if (w.isVisited(cX, cY-1) == true)
+        			{
+        				moveDown();
+        			}
+        			else if (w.isVisited(cX, cY+ 1) == true)
+        			{
+        				moveUp();
+            		}
+        		}
+        		else if (rnd == 2) {	
+        			rnd = decideRandomMove();
+        			if ((rnd == 0) & (w.isValidPosition(cX-1, cY) == true))
+        			{
+        				moveLeft();
+        			}
+        			else if ((rnd == 1) & (w.isValidPosition(cX+1, cY) == true))
+        			{
+        				moveRight();
+        			}
+        			else if ((rnd == 2) & (w.isValidPosition(cX, cY-1) == true))
+        			{
+        				moveDown();
+        			}
+        			else if ((rnd == 3) & (w.isValidPosition(cX, cY+1) == true))
+        			{
+        				moveUp();
+        			}
+        			
+        		}
+        		else {
+        			if (w.hasArrow() == true) {
+        				w.doAction(World.A_SHOOT);
+        				System.out.println("Arrow was used");
+        				w.doAction(World.A_MOVE);
 
-    }    
-    
+        		}
+            	
+        				
+        		}
+        		
+        	}
+        	else if (w.hasBreeze(cX, cY) == true)
+        	{
+        		rnd = decideRandomMove();
+        		if (rnd < 2) 
+        		{ //return to the place it visited
+        			if (w.isVisited(cX -1, cY) == true)
+        			{
+        				moveLeft();
+        			}
+        			else if (w.isVisited(cX + 1, cY) == true)
+        			{
+        				moveRight();
+        			}
+        			else if (w.isVisited(cX, cY-1) == true)
+        			{
+        				moveDown();
+        			}
+        			else if (w.isVisited(cX, cY+ 1) == true)
+        			{
+        				moveUp();
+            		}
+        		}
+        	}
+        		else if (rnd >= 2) 
+        		{	
+        			rnd = decideRandomMove();
+        			if ((rnd == 0 & w.isValidPosition(cX-1, cY)))
+        			{
+        				moveLeft();
+        			}
+        			else if ((rnd == 1 & w.isValidPosition(cX+1, cY)))
+        			{
+        				moveRight();
+        			}
+        			else if ((rnd == 2 & w.isValidPosition(cX, cY-1)))
+        			{
+        				moveDown();
+        			}
+        			else if ((rnd == 3 & w.isValidPosition(cX, cY+1)))
+        			{
+        				moveUp();
+        			}
+        		}
+        }
+        		   			
+       
+    }     
      /**
      * Genertes a random instruction for the Agent.
      */
+    
     public int decideRandomMove()
     {
       return (int)(Math.random() * 4);
@@ -332,4 +431,3 @@ public class MyAgent implements Agent
     }
     
 }
-
