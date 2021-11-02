@@ -7,7 +7,7 @@ import java.util.List;
  * Contains starting code for creating your own Wumpus World agent.
  * Currently the agent only make a random decision each turn.
  * 
- * @author Johan Hagelbäck
+ * @author Johan HagelbÃ¤ck
  */
 public class MyAgent implements Agent
 {
@@ -33,22 +33,9 @@ public class MyAgent implements Agent
 
     public void doAction()
     {
-        //Location of the player
         int cX = w.getPlayerX();
         int cY = w.getPlayerY();
-        //boolean knownSquare = w.isUnknown(cX + 1, cY);
-        //boolean squareVisited = w.isVisited(cX, cY);
-        //boolean rightSquareVisited = w.isVisited(cX + 1, cY);
-        //System.out.println(cX);
-        //System.out.println(cY);
-        //System.out.println(rightSquareVisited);
-        //System.out.println(knownSquare);	
-        List myList = new ArrayList();
-        
-        
-        
-        
-        
+
         //Basic action:
         //Grab Gold if we can.
         if (w.hasGlitter(cX, cY))
@@ -95,55 +82,23 @@ public class MyAgent implements Agent
             System.out.println("I am facing Down");
         }
         
-        //decide next move
-        //rnd = decideRandomMove();
-        /*System.out.println(rnd);
-        if (rnd==0)
-        {
-            w.doAction(World.A_TURN_LEFT);
-            w.doAction(World.A_MOVE);
-        }
-        
-        if (rnd==1)
-        {
-            w.doAction(World.A_MOVE);
-        }
-                
-        if (rnd==2)
-        {
-            w.doAction(World.A_TURN_LEFT);
-            w.doAction(World.A_TURN_LEFT);
-            w.doAction(World.A_MOVE);
-        }
-                        
-        if (rnd==3)
-        {
-            w.doAction(World.A_TURN_RIGHT);
-            w.doAction(World.A_MOVE);
-        }  */
-        
-        //moveLeft();
-        //moveRight();
-        //moveDown();
-        //moveUp();
-        if ((cX == 1) & (cY == 1))//square 1,1
-        {	if ((w.hasStench(w.getPlayerX(), w.getPlayerY())) == true) //has stench
+        //square 1,1 (one long if statement)
+        if ((cX == 1) & (cY == 1))
+        {	if ((w.hasStench(cX, cY)) == true) //has stench
         	{
-        		System.out.println("current square has stench");
         		if (w.hasArrow() == true)// if arrow is available
         		{
     				w.doAction(World.A_SHOOT);//shot arrow to the current direction since it costs least points
     				System.out.println("Arrow was used");
-    				
-    				if ((w.hasStench(w.getPlayerX(), w.getPlayerY())) == true)//checks if wumpus is still alive
+    				if (w.wumpusAlive() == true)//checks if wumpus is still alive
     				{
     					System.out.println("Wumpus still alive");
-    					w.doAction(World.A_MOVE);//no Wumpus so move forward
+    					w.doAction(World.A_MOVE);//no Wumpus so move forward	
     				}
     				else
     				{
     					System.out.println("Wumpus was killed");
-    					w.doAction(World.A_MOVE);
+    					w.doAction(World.A_MOVE); //moveforward anyway since wumpus is not there
     				}
         		}
         		else
@@ -151,26 +106,28 @@ public class MyAgent implements Agent
         			moveRight();
         		}	
         	}
+        
         	else 
         	{
         		rnd = decideRandomMove();
         		if (rnd > 1)
         		{
-        			//(w.isVisited(cX + 1, cY) == false)
-        			//(w.isVisited(cX + 1, cY) == false)
         			moveRight();
         		}
-        		else {
+        		else 
+        		{
         			moveUp();
         		}
-        	}
+        			
+    		}
         }
-        else
+        
+        else //if there is no stench in square 1,1
         {
         	if ((w.hasStench(cX, cY) == false) & (w.hasBreeze(cX, cY) == false)) // square with no sensors
         	{
         		rnd = decideRandomMove();//decide random move
-        		System.out.println(rnd);
+        		//System.out.println(rnd);
         		
         		//checks if square to the right, left, up, down is visited, and valid, and makes move
         		if ((rnd == 0) & (w.isValidPosition(cX+1, cY) == true) & (w.isVisited(cX + 1, cY) == false))
@@ -192,47 +149,6 @@ public class MyAgent implements Agent
         		
         		else //moves in oposite direction if the first priority is visited/invalid
         		{
-        			if ((rnd == 0) & (w.isValidPosition(cX -1, cY) == true))
-        			{
-        				moveLeft();
-        			}
-        			else if ((rnd == 1) & (w.isValidPosition(cX + 1, cY) == true))
-        			{
-        				moveRight();
-        			}
-        			else if ((rnd == 2) & (w.isValidPosition(cX, cY-1) == true))
-        			{
-        				moveDown();
-        			}
-        			else if ((rnd == 3) & (w.isValidPosition(cX, cY+ 1) == true))
-        			{
-        				moveUp();
-        			}
-        		}
-        	}
-        	else if ((w.hasStench(cX, cY) == true) || ((w.hasStench(cX, cY) == true) & (w.hasBreeze(cX, cY))))
-        		{
-        		rnd = decideRandomMove();
-        		if (rnd < 2) { //return to the place it visited
-        			if (w.isVisited(cX -1, cY) == true)
-        			{
-        				moveLeft();
-        			}
-        			else if (w.isVisited(cX + 1, cY) == true)
-        			{
-        				moveRight();
-        			}
-        			else if (w.isVisited(cX, cY-1) == true)
-        			{
-        				moveDown();
-        			}
-        			else if (w.isVisited(cX, cY+ 1) == true)
-        			{
-        				moveUp();
-            		}
-        		}
-        		else if (rnd == 2) {	
-        			rnd = decideRandomMove();
         			if ((rnd == 0) & (w.isValidPosition(cX-1, cY) == true))
         			{
         				moveLeft();
@@ -249,71 +165,137 @@ public class MyAgent implements Agent
         			{
         				moveUp();
         			}
-        			
         		}
-        		else {
-        			if (w.hasArrow() == true) {
-        				w.doAction(World.A_SHOOT);
-        				System.out.println("Arrow was used");
-        				w.doAction(World.A_MOVE);
+        	}
+        	else if ((w.hasStench(cX, cY) == true) || ((w.hasStench(cX, cY) == true) & (w.hasBreeze(cX, cY)))) //square with stench, or stench & breeze
+    		{
+    		rnd = decideRandomMove();
+    		if (rnd < 2) { //return to the place it visited
+    			if (w.isVisited(cX -1, cY) == true)
+    			{
+    				moveLeft();
+    			}
+    			else if (w.isVisited(cX + 1, cY) == true)
+    			{
+    				moveRight();
+    			}
+    			else if (w.isVisited(cX, cY-1) == true)
+    			{
+    				moveDown();
+    			}
+    			else if (w.isVisited(cX, cY+ 1) == true)
+    			{
+    				moveUp();
+        		}
+    		}
+    		else if (rnd == 2) {	
+    			rnd = decideRandomMove();
+    			if ((rnd == 0) & (w.isValidPosition(cX-1, cY) == true))
+    			{
+    				moveLeft();
+    			}
+    			else if ((rnd == 1) & (w.isValidPosition(cX+1, cY) == true))
+    			{
+    				moveRight();
+    			}
+    			else if ((rnd == 2) & (w.isValidPosition(cX, cY-1) == true))
+    			{
+    				moveDown();
+    			}
+    			else if ((rnd == 3) & (w.isValidPosition(cX, cY+1) == true))
+    			{
+    				moveUp();
+    			}
+    			
+    		}
+    		else {
+    			if (w.hasArrow() == true) {
+    				w.doAction(World.A_SHOOT);
+    				System.out.println("Arrow was used");
+    				
+    				if (w.wumpusAlive() == true)//checks if wumpus is still alive
+    				{
+    					System.out.println("Wumpus still alive");
+    					w.doAction(World.A_MOVE);//no Wumpus so move forward	
+    				}
+    				else
+    				{
+    					System.out.println("Wumpus was killed");
+    					w.doAction(World.A_MOVE); //moveforward anyway since wumpus is not there
+    				}
+    			}
+				else {
+					w.doAction(World.A_MOVE);	
+    				}
 
+    		}
+        	
+    				
+    		}
+    		
+    	
+    	else if (w.hasBreeze(cX, cY) == true)
+    	{
+    		rnd = decideRandomMove();
+    		if (rnd < 2) 
+    		{ //return to the place it visited
+    			if (w.isVisited(cX -1, cY) == true)
+    			{
+    				moveLeft();
+    			}
+    			else if (w.isVisited(cX + 1, cY) == true)
+    			{
+    				moveRight();
+    			}
+    			else if (w.isVisited(cX, cY-1) == true)
+    			{
+    				moveDown();
+    			}
+    			else if (w.isVisited(cX, cY+ 1) == true)
+    			{
+    				moveUp();
         		}
-            	
-        				
-        		}
-        		
-        	}
-        	else if (w.hasBreeze(cX, cY) == true)
-        	{
-        		rnd = decideRandomMove();
-        		if (rnd < 2) 
-        		{ //return to the place it visited
-        			if (w.isVisited(cX -1, cY) == true)
-        			{
-        				moveLeft();
-        			}
-        			else if (w.isVisited(cX + 1, cY) == true)
-        			{
-        				moveRight();
-        			}
-        			else if (w.isVisited(cX, cY-1) == true)
-        			{
-        				moveDown();
-        			}
-        			else if (w.isVisited(cX, cY+ 1) == true)
-        			{
-        				moveUp();
-            		}
-        		}
-        	}
-        		else if (rnd >= 2) 
-        		{	
-        			rnd = decideRandomMove();
-        			if ((rnd == 0 & w.isValidPosition(cX-1, cY)))
-        			{
-        				moveLeft();
-        			}
-        			else if ((rnd == 1 & w.isValidPosition(cX+1, cY)))
-        			{
-        				moveRight();
-        			}
-        			else if ((rnd == 2 & w.isValidPosition(cX, cY-1)))
-        			{
-        				moveDown();
-        			}
-        			else if ((rnd == 3 & w.isValidPosition(cX, cY+1)))
-        			{
-        				moveUp();
-        			}
-        		}
-        }
-        		   			
-       
-    }     
+    		}
+    	}
+    		else if (rnd >= 2) 
+    		{	
+    			rnd = decideRandomMove();
+    			if ((rnd == 0 & w.isValidPosition(cX-1, cY)))
+    			{
+    				moveLeft();
+    			}
+    			else if ((rnd == 1 & w.isValidPosition(cX+1, cY)))
+    			{
+    				moveRight();
+    			}
+    			else if ((rnd == 2 & w.isValidPosition(cX, cY-1)))
+    			{
+    				moveDown();
+    			}
+    			else if ((rnd == 3 & w.isValidPosition(cX, cY+1)))
+    			{
+    				moveUp();
+    			}
+    		}
+    }
+    		   			
+   
+}
+        	
+
+        
+        
+        
+        
+        	
+        	
+        
+
+    
+    
      /**
      * Genertes a random instruction for the Agent.
      */
-    
     public int decideRandomMove()
     {
       return (int)(Math.random() * 4);
@@ -431,3 +413,4 @@ public class MyAgent implements Agent
     }
     
 }
+
